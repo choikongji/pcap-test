@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <libnet.h>
 #include <stdlib.h>
+#include <iostream>
+#include <algorithm>
+using namespace std;
 
 void usage() {
     printf("syntax: pcap-test <interface>\n");
@@ -64,7 +67,8 @@ int main(int argc, char* argv[]) {
             const unsigned char *data;
             printf("=====Payload(Data)=====\n");
             data = packet + sizeof(libnet_ethernet_hdr)+ipv4->ip_hl*4 + tcp->th_off*4;
-            for(int i=0;i<=16;i++){
+            int total = min(payload,16);
+            for(int i=0;i<total;i++){
                 printf("%02x", data[i]);
                 printf("\n");
             }printf("\n");
