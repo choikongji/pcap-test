@@ -5,21 +5,21 @@ struct libnet_ethernet_hdr
 {
     u_int8_t ether_dhost[6];
     u_int8_t ether_shost[6];
-	u_int16_t ether_type;
+    u_int16_t ether_type;
 };
 #define ETHERTYPE_IP 0x0800
 
 struct libnet_ipv4_hdr
 {
-u_int8_t ip_hl:4, ip_v:4; /* header length, version* LIBNET_LIL_ENDIAN*/
-u_int8_t ip_tos;       /* type of service */
-u_int16_t ip_len;         /* total lengtwh 2byte */
-u_int16_t ip_id;          /* identification */
-u_int16_t ip_off;
-u_int8_t ip_ttl;          /* time to live */
-u_int8_t ip_p;            /* protocol */
-u_int16_t ip_sum;         /* checksum */
-u_int8_t ip_src[4], ip_dst[4]; /* source and dest address */
+    u_int8_t ip_hl:4, ip_v:4; /* header length, version* LIBNET_LIL_ENDIAN*/
+    u_int8_t ip_tos;       /* type of service */
+    u_int16_t ip_len;         /* total lengtwh 2byte */
+    u_int16_t ip_id;          /* identification */
+    u_int16_t ip_off;
+    u_int8_t ip_ttl;          /* time to live */
+    u_int8_t ip_p;            /* protocol */
+    u_int16_t ip_sum;         /* checksum */
+    u_int8_t ip_src[4], ip_dst[4]; /* source and dest address */
 };
 
 struct libnet_tcp_hdr

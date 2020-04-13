@@ -36,15 +36,13 @@ int main(int argc, char* argv[]) {
         }
 
 
-        struct libnet_ethernet_hdr *eh; //ether_header
-        eh = (struct libnet_ethernet_hdr *)packet;
-        struct libnet_ipv4_hdr *ipv4; //ipv4
-        ipv4 = (struct libnet_ipv4_hdr *)(packet + sizeof(libnet_ethernet_hdr));
+        struct libnet_ethernet_hdr *eh = (struct libnet_ethernet_hdr *)packet;
         struct libnet_tcp_hdr *tcp; //tcp
+        if((ntohs(eh->ether_type) != ETHERTYPE_IP))continue;
+        struct libnet_ipv4_hdr *ipv4 = (struct libnet_ipv4_hdr *)(packet + sizeof(libnet_ethernet_hdr));
+        if(ipv4->ip_p != IPPROTO_TCP)continue;
         tcp= (struct libnet_tcp_hdr *)(packet + sizeof(libnet_ethernet_hdr)+ (ipv4->ip_hl)*4);
 
-        if((ntohs(eh->ether_type) != ETHERTYPE_IP))continue;
-        if(ipv4->ip_p != IPPROTO_TCP)continue;
         printf("=====Ethernet Header======\n");
         printf("Dst = %02x:%02x:%02x:%02x:%02x:%02x\n",
                eh->ether_dhost[0],eh->ether_dhost[1],eh->ether_dhost[2],eh->ether_dhost[3],eh->ether_dhost[4],eh->ether_dhost[5]);
@@ -55,14 +53,11 @@ int main(int argc, char* argv[]) {
         printf("Src : %d.%d.%d.%d\n", ipv4->ip_src[0],ipv4->ip_src[1],ipv4->ip_src[2],ipv4->ip_src[3]);
         printf("Dst : %d.%d.%d.%d\n", ipv4->ip_dst[0],ipv4->ip_dst[1],ipv4->ip_dst[2],ipv4->ip_dst[3]);
 
-
         printf("=====TCP Header=====\n");
         printf("Src : %d\n", ntohs(tcp->srcadd));
         printf("Dst : %d\n\n", ntohs(tcp->dstadd));
 
         int payload = ntohs(ipv4->ip_len)- ipv4->ip_hl*4- tcp->th_off*4;
-
-
         if(payload>0){
             const unsigned char *data;
             printf("=====Payload(Data)=====\n");
